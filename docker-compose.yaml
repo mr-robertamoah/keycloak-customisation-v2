@@ -1,0 +1,108 @@
+version: "3.9"
+
+services:
+
+  # ── Database ────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Keycloak ─────────────────────────────────────────────────────
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: secret
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_PORT: 8080
+      # Disable ALL theme caching — essential for development
+      KC_SPI_THEME_STATIC_MAX_AGE: -1
+      KC_SPI_THEME_CACHE_THEMES: "false"
+      KC_SPI_THEME_CACHE_TEMPLATES: "false"
+    volumes:
+      # Mount our custom theme directly into Keycloak's theme directory
+      - ./keycloak/themes/write-place:/opt/keycloak/themes/write-place
+      # Bootstrap realm/clients on fresh startup (ignored if realm exists).
+      - ./keycloak/realm-import:/opt/keycloak/data/import
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ── Mailhog (catches all emails locally) ────────────────────────
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"   # SMTP — Keycloak sends here
+      - "8025:8025"   # Web UI — view emails at http://localhost:8025
+
+  # ── Auth Service ─────────────────────────────────────────────────
+  auth-service:
+    build: ./services/auth-service
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_PUBLIC_URL: http://localhost:8080
+      KEYCLOAK_REALM: write-place
+      KEYCLOAK_CLIENT_ID: auth-service
+      KEYCLOAK_CLIENT_SECRET: auth-service-secret
+      BLOG_SERVICE_URL: http://blog-service:8002
+    ports:
+      - "8001:8001"
+    depends_on:
+      - keycloak
+    restart: on-failure
+
+  # ── Blog Service ─────────────────────────────────────────────────
+  blog-service:
+    build: ./services/blog-service
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_PUBLIC_URL: http://localhost:8080
+      KEYCLOAK_REALM: write-place
+      KEYCLOAK_CLIENT_ID: blog-service
+      KEYCLOAK_CLIENT_SECRET: blog-service-secret
+    ports:
+      - "8002:8002"
+    depends_on:
+      - keycloak
+    restart: on-failure
+
+  # ── Frontend (Vue SPA via Vite dev server) ───────────────────────
+  # The Vite dev server serves the app AND proxies API calls to the
+  # backend services — so the browser only ever talks to port 5173.
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - auth-service
+      - blog-service
+    # Mount source files so edits on your machine hot-reload instantly
+    # inside the container without rebuilding the image.
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/vite.config.js:/app/vite.config.js
+
+volumes:
+  postgres_data:

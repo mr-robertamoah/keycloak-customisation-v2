@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 56" fill="none">
+  <!-- Pen nib icon -->
+  <rect width="44" height="44" x="6" y="6" rx="10" fill="#6366F1"/>
+  <path d="M22 34 L28 16 L34 34 L28 30 Z" fill="white" stroke="white" stroke-width="1"
+        stroke-linejoin="round"/>
+  <circle cx="28" cy="38" r="2.5" fill="white"/>
+  <!-- Brand name -->
+  <text x="60" y="24" font-family="system-ui, sans-serif" font-size="14"
+        font-weight="700" fill="#0F172A" letter-spacing="-0.5">The Write</text>
+  <text x="60" y="42" font-family="system-ui, sans-serif" font-size="14"
+        font-weight="700" fill="#6366F1" letter-spacing="-0.5">Place</text>
+</svg>

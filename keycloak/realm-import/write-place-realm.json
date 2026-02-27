@@ -1,0 +1,68 @@
+{
+  "realm": "write-place",
+  "enabled": true,
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "en",
+    "fr",
+    "es"
+  ],
+  "defaultLocale": "en",
+  "loginTheme": "write-place",
+  "accountTheme": "keycloak.v3",
+  "adminTheme": "keycloak.v2",
+  "emailTheme": "write-place",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": false,
+  "loginWithEmailAllowed": true,
+  "verifyEmail": true,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": true,
+  "rememberMe": true,
+  "smtpServer": {
+    "from": "noreply@writeplace.local",
+    "host": "mailhog",
+    "port": "1025",
+    "starttls": "false",
+    "ssl": "false"
+  },
+  "clients": [
+    {
+      "clientId": "write-place-frontend",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:5173/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173"
+      ],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:5173"
+      }
+    },
+    {
+      "clientId": "auth-service",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "auth-service-secret",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true
+    },
+    {
+      "clientId": "blog-service",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "blog-service-secret",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true
+    }
+  ]
+}

@@ -1,0 +1,360 @@
+/* ═══════════════════════════════════════════════════════════════
+   THE WRITE PLACE — Keycloak Login Theme
+   No PatternFly. No parent CSS. We own every rule.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables ──────────────────────────────────────────── */
+:root {
+  --brand-primary:     #6366F1;   /* indigo */
+  --brand-primary-dk:  #4F46E5;
+  --brand-primary-lt:  #EEF2FF;
+  --brand-accent:      #F59E0B;   /* amber */
+  --brand-error:       #EF4444;
+  --brand-success:     #10B981;
+  --brand-warning:     #F59E0B;
+  --brand-info:        #3B82F6;
+
+  --bg-page:    #F1F5F9;
+  --bg-card:    #FFFFFF;
+  --bg-input:   #FFFFFF;
+
+  --text-primary:  #0F172A;
+  --text-muted:    #64748B;
+  --text-inverse:  #FFFFFF;
+
+  --border:        #E2E8F0;
+  --border-focus:  var(--brand-primary);
+
+  --radius-sm: 0.375rem;
+  --radius:    0.625rem;
+  --radius-lg: 1rem;
+
+  --shadow-card: 0 4px 32px rgba(99, 102, 241, 0.10),
+                 0 1px 4px  rgba(0, 0, 0, 0.06);
+  --shadow-btn:  0 2px 8px  rgba(99, 102, 241, 0.30);
+
+  --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Page Layout ─────────────────────────────────────────────── */
+html, body {
+  min-height: 100vh;
+  font-family: var(--font);
+  font-size: 16px;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Full-page centred layout */
+.wp-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  place-items: center;
+  padding: 2rem 1rem;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99,102,241,0.12), transparent),
+    var(--bg-page);
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.wp-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  max-width: 440px;
+  padding: 2.5rem 2.25rem;
+  border: 1px solid var(--border);
+}
+
+/* ── Brand Header ────────────────────────────────────────────── */
+.wp-brand {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.wp-brand__logo {
+  height: 52px;
+  margin-bottom: 0.75rem;
+}
+
+.wp-brand__name {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.wp-brand__tagline {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ── Page Title (under brand) ────────────────────────────────── */
+.wp-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* ── Alert / Message Banner ──────────────────────────────────── */
+.wp-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.wp-alert__icon {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.1rem;
+}
+
+.wp-alert--error   { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+.wp-alert--warning { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
+.wp-alert--success { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+.wp-alert--info    { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+
+/* ── Form ────────────────────────────────────────────────────── */
+.wp-form { display: flex; flex-direction: column; gap: 1.125rem; }
+
+.wp-field { display: flex; flex-direction: column; gap: 0.375rem; }
+
+.wp-field--row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.875rem;
+}
+
+.wp-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.wp-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--bg-input);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  appearance: none;
+}
+
+.wp-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.wp-input--error {
+  border-color: var(--brand-error);
+}
+
+.wp-input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.wp-field-error {
+  font-size: 0.8rem;
+  color: var(--brand-error);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ── Checkbox Row ────────────────────────────────────────────── */
+.wp-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.wp-checkbox-row input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--brand-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Form Footer Row (remember me + forgot password) ────────── */
+.wp-form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -0.25rem;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.wp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6875rem 1.25rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+  font-family: var(--font);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+  text-decoration: none;
+}
+
+.wp-btn--primary {
+  width: 100%;
+  background: var(--brand-primary);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-btn);
+  margin-top: 0.25rem;
+}
+
+.wp-btn--primary:hover {
+  background: var(--brand-primary-dk);
+  transform: translateY(-1px);
+}
+
+.wp-btn--primary:active { transform: translateY(0); }
+
+.wp-btn--ghost {
+  background: transparent;
+  color: var(--brand-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.25rem 0;
+}
+
+.wp-btn--ghost:hover { text-decoration: underline; }
+
+/* ── Links section below the card ───────────────────────────── */
+.wp-links {
+  text-align: center;
+  margin-top: 1.375rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.wp-links a {
+  color: var(--brand-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.wp-links a:hover { text-decoration: underline; }
+
+/* ── Divider ─────────────────────────────────────────────────── */
+.wp-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+
+.wp-divider::before,
+.wp-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Language Switcher ───────────────────────────────────────── */
+.wp-lang-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.wp-lang-btn {
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.wp-lang-btn:hover,
+.wp-lang-btn--active {
+  background: var(--brand-primary-lt);
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+/* ── Info / Success page ─────────────────────────────────────── */
+.wp-info-box {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.wp-info-box__icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.wp-info-box__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.wp-info-box__body {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+/* ── Password strength hint ──────────────────────────────────── */
+.wp-password-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.wp-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .wp-card { padding: 2rem 1.25rem; }
+  .wp-field--row { grid-template-columns: 1fr; }
+}
