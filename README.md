@@ -1,6 +1,8 @@
 # Keycloak Customisation V2
 
-Local development stack for:
+Local development stack focused on Keycloak internationalization and custom theme customization that does not rely on Keycloak parent theme markup/styles.
+
+Includes:
 - Keycloak (with custom login/email themes)
 - Vue frontend (Vite)
 - Auth service (FastAPI)
